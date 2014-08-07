@@ -20,6 +20,7 @@ size_t MIDIMsg_lengthFromStatus(int8_t status)
     } else if (MIDIMSG_IS_3_BYTE_MSG(status)) {
         return 3;
     } else {
+        /* Other lengths (System Exclusive Messages) are not yet implemented. */
         return 0;
     }
 }

@@ -2,6 +2,7 @@
 #define MM_MIDIEVENTBUILDER_H 
 #include <stdlib.h>
 #include <stdint.h> 
+#include "mm_midievent.h" 
 
 typedef enum
 {
@@ -12,11 +13,15 @@ typedef enum
 
 typedef struct __MIDIEventBuilder {
     MIDIEventBuilder_State_t state;
-    size_t wantByte;
+    size_t waitByte;
     MIDIEvent *event;
 } MIDIEventBuilder;
 
-typedef (void)(*MIDIEventBuilder_Update_CB_t)(MIDIEventBuilder *);
+typedef void(*MIDIEventBuilder_OnComplete_CB_t)(MIDIEventBuilder *);
+typedef MIDIEvent_Time_t(*MIDIEventBuilder_GetTime_CB_t)(void);
+
+#define MIDIEventBuilder_getMsg(meb) (meb->event->msg)
+#define MIDIEventBuilder_appendByte(meb,byte) MIDIEventBuilder_getMsg(meb).data[meb->waitByte++] = byte
 
 
 #endif /* MM_MIDIEVENTBUILDER_H */

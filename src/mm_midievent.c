@@ -1,3 +1,5 @@
+#include "mm_midievent.h"
+
 MIDIEvent *MIDIEvent_new(size_t length, uint64_t time)
 {
     if (length == 0) { return NULL; }

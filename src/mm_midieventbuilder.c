@@ -1,7 +1,5 @@
 #include "mm_midieventbuilder.h" 
-#include "mm_midievent.h" 
 
-#define MIDIEventBuilder_appendByte(meb,byte) meb->event.msg->data[meb->waitByte++] = byte
 
 void MIDIEventBuilder_init(MIDIEventBuilder *meb)
 {
@@ -20,9 +18,14 @@ static void MIDIEventBuilder_updateIfSTATUS(MIDIEventBuilder *meb, int8_t byte, 
     meb->waitByte = 1;
 }
 
-static void MIDIEventBuilder_updateIfCOMPLETE(MIDIEventBuilder *meb, int8_t byte,
-        MIDIEventBuilder_Update_CB_t on_complete)
+static void MIDIEventBuilder_updateIfCOMPLETE(MIDIEventBuilder *meb,
+        MIDIEventBuilder_OnComplete_CB_t on_complete)
 {
+    /* MIDIEvent ready to move on (get stored or whatever) */
+    on_complete(meb);
+    /* return builder to initial state */
+    MIDIEventBuilder_init(meb);
+}
 
 
 /* Function usually called when a byte has been received (over UART for
@@ -33,14 +36,14 @@ static void MIDIEventBuilder_updateIfCOMPLETE(MIDIEventBuilder *meb, int8_t byte
  */
 void MIDIEventBuilder_update(MIDIEventBuilder *meb,
                              int8_t byte,
-                             uint64_t(*get_time)(void),
-                             MIDIEventBuilder_Update_CB_t on_complete)
+                             MIDIEventBuilder_GetTime_CB_t get_time,
+                             MIDIEventBuilder_OnComplete_CB_t on_complete)
 {
 
     switch (meb->state) {
         case MIDIEventBuilder_State_WAIT_STATUS :
             if (MIDIMSG_IS_STATUS(byte)) {
-                MIDIEventBuilder_updateIfSTATUS(meb, byte, time);
+                MIDIEventBuilder_updateIfSTATUS(meb, byte, get_time());
             }
             /* return if not a status byte (don't change state) */
             return;
@@ -49,18 +52,20 @@ void MIDIEventBuilder_update(MIDIEventBuilder *meb,
                 /* old event is now garbage, start over again */
                 free(meb->event);
                 MIDIEventBuilder_init(meb);
-                MIDIEventBuilder_updateIfSTATUS(meb, byte, time);
-                return;
+                MIDIEventBuilder_updateIfSTATUS(meb, byte, get_time());
             } else if (MIDIMSG_IS_DATA(byte)) {
                 MIDIEventBuilder_appendByte(meb, byte);
-                if ((MIDIMSG_IS_2_BYTE_MSG(meb->event.msg->data[0])
+                /*
+                if ((MIDIMSG_IS_2_BYTE_MSG(MIDIEventBuilder_getMsg(meb).data[0])
                         && (meb->waitByte == 2))
-                    || (MIDIMSG_IS_3_BYTE_MSG(meb->event.msg->data[0])
-                        && (meb->waitByte == 3))) {
-
-
-
-
-            
-
+                    || (MIDIMSG_IS_3_BYTE_MSG(MIDIEventBuilder_getMsg(meb).data[0])
+                        && (meb->waitByte == 3)))
+                */
+                if (MIDIMSG_GET_LENGTH(MIDIEventBuilder_getMsg(meb).data[0]) == meb->waitByte) {
+                    MIDIEventBuilder_updateIfCOMPLETE(meb, on_complete);
+                }
+            }
+            return;
+    }
+}
 

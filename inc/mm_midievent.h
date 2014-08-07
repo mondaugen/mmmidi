@@ -1,6 +1,12 @@
 #ifndef MM_MIDIEVENT_H
 #define MM_MIDIEVENT_H 
 
+#include <stdlib.h> 
+#include <stdint.h> 
+#include "mm_midimsg.h" 
+
+typedef uint32_t MIDIEvent_Time_t;
+
 typedef struct __MIDIEvent {
     uint64_t time;
     MIDIMsg msg;

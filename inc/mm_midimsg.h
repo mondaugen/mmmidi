@@ -16,8 +16,10 @@
 #define MIDIMSG_IS_STATUS(x) ((x) & 0x80) 
 #define MIDIMSG_IS_DATA(x)   (!(MIDIMSG_IS_STATUS(x))) 
 
-#define MIDIMSG_GET_STATUS(x) ((x) & 0xf0) 
-#define MIDIMSG_GET_CHANNEL(x) ((x) & 0x0f) 
+#define MIDIMSG_GET_STATUS(x)       ((x) & 0xf0) 
+#define MIDIMSG_GET_CHANNEL(x)      ((x) & 0x0f) 
+#define MIDIMSG_KNOW_LENGTH(x)      (MIDIMSG_IS_2_BYTE_MSG(x) || MIDIMSG_IS_3_BYTE_MSG(x))  
+#define MIDIMSG_GET_LENGTH(x)       (MIDIMSG_IS_2_BYTE_MSG(x) ? 2 : (MIDIMSG_IS_3_BYTE_MSG(x) ? 3 : 0))
 
 #define MIDIMSG_IS_NOTE_OFF(x)      (MIDIMSG_GET_STATUS(x) == MIDIMSG_NOTE_OFF)
 #define MIDIMSG_IS_NOTE_ON(x)       (MIDIMSG_GET_STATUS(x) == MIDIMSG_NOTE_ON)
