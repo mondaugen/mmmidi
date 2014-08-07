@@ -17,4 +17,5 @@ MIDIEvent *MIDIEvent_newFromStatus(size_t status, uint64_t time)
         return NULL;
     }
     MIDIMsg_init(&(result->msg), 1, status);
+    return result;
 }

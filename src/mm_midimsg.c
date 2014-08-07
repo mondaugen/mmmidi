@@ -3,7 +3,7 @@
 /* returns the size of the MIDIMsg that would be allocated */
 size_t MIDIMsg_sizeof(size_t length)
 {
-    return sizeof(MIDIMsg) + sizeof(int8_t) * length;
+    return sizeof(MIDIMsg) + sizeof(MIDIMsg_Byte_t) * length;
 }
 
 MIDIMsg *MIDIMsg_new(size_t length)
@@ -13,7 +13,7 @@ MIDIMsg *MIDIMsg_new(size_t length)
     return result;
 }
 
-size_t MIDIMsg_lengthFromStatus(int8_t status)
+size_t MIDIMsg_lengthFromStatus(MIDIMsg_Byte_t status)
 {
     if (MIDIMSG_IS_2_BYTE_MSG(status)) {
         return 2;
@@ -35,12 +35,12 @@ void MIDIMsg_init(MIDIMsg *msg, size_t n, ...)
     va_start(args, n);
     for (idx = 0; idx < n; idx++) {
         datum = va_arg(args, int);
-        msg->data[idx] = (int8_t)datum;
+        msg->data[idx] = (MIDIMsg_Byte_t)datum;
     }
     va_end(args);
 }
 
-MIDIMsg *MIDIMsg_newFromStatus(int8_t status)
+MIDIMsg *MIDIMsg_newFromStatus(MIDIMsg_Byte_t status)
 {
     MIDIMsg *result;
     if (!(result = MIDIMsg_new(MIDIMsg_lengthFromStatus(status)))) {

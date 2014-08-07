@@ -8,7 +8,7 @@ void MIDIEventBuilder_init(MIDIEventBuilder *meb)
     meb->event = NULL;
 }
 
-static void MIDIEventBuilder_updateIfSTATUS(MIDIEventBuilder *meb, int8_t byte, uint64_t time)
+static void MIDIEventBuilder_updateIfSTATUS(MIDIEventBuilder *meb, MIDIMsg_Byte_t byte, uint64_t time)
 {
     if (!(meb->event = MIDIEvent_newFromStatus(byte, time))) {
         /* couldn't make event, don't change state */
@@ -35,7 +35,7 @@ static void MIDIEventBuilder_updateIfCOMPLETE(MIDIEventBuilder *meb,
  * is complete after the byte is appended to it.
  */
 void MIDIEventBuilder_update(MIDIEventBuilder *meb,
-                             int8_t byte,
+                             MIDIMsg_Byte_t byte,
                              MIDIEventBuilder_GetTime_CB_t get_time,
                              MIDIEventBuilder_OnComplete_CB_t on_complete)
 {

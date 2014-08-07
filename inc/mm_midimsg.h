@@ -37,14 +37,16 @@
                                      MIDIMSG_IS_CNTRL_CHNG(x) || \
                                      MIDIMSG_IS_PCH_BND(x))
 
+typedef uint8_t MIDIMsg_Byte_t;
+
 typedef struct __MIDIMsg {
-    int8_t data[0];
+    MIDIMsg_Byte_t data[0];
 } MIDIMsg;
 
 size_t MIDIMsg_sizeof(size_t length);
 MIDIMsg *MIDIMsg_new(size_t length);
-size_t MIDIMsg_lengthFromStatus(int8_t status);
+size_t MIDIMsg_lengthFromStatus(MIDIMsg_Byte_t status);
 void MIDIMsg_init(MIDIMsg *msg, size_t n, ...);
-MIDIMsg *MIDIMsg_newFromStatus(int8_t status);
+MIDIMsg *MIDIMsg_newFromStatus(MIDIMsg_Byte_t status);
 
 #endif /* MM_MIDIMSG_H */
