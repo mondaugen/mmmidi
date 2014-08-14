@@ -39,7 +39,13 @@
 
 /* These are provided for future extensions where, perhaps, the data will be a
  * linked list rather than an array of bytes, to support sysex messages, for
- * example */
+ * example.
+ * Just so you don't forget, the way you would use a sort of message subclass
+ * would be you would check the status byte to see what kind of message you
+ * have, if you have a channel message, use the classic array getting and
+ * setting, DGAF. If you have a sysex message, well then you gotta cast to that
+ * subclass type and use the linked-list getter setter methods.
+ * */
 #define MIDIMsg_setByte(msg,index,value) (msg)->data[index] = value
 #define MIDIMsg_getByte(msg,index) (msg)->data[index]
 #define MIDIMsg_free(msg) free(msg) 
