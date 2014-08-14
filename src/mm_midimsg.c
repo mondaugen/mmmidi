@@ -35,7 +35,7 @@ void MIDIMsg_init(MIDIMsg *msg, size_t n, ...)
     va_start(args, n);
     for (idx = 0; idx < n; idx++) {
         datum = va_arg(args, int);
-        msg->data[idx] = (MIDIMsg_Byte_t)datum;
+        MIDIMsg_setByte(msg,idx,(MIDIMsg_Byte_t)datum);
     }
     va_end(args);
 }

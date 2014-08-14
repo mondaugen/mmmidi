@@ -18,11 +18,8 @@ typedef struct __MIDIMsgBuilder {
 } MIDIMsgBuilder;
 
 typedef void(*MIDIMsgBuilder_OnComplete_CB_t)(MIDIMsgBuilder *);
-/* This doesn't make sense because MIDIMsg doesn't have a time associated with
- * it. */
-//typedef MIDIMsg_Time_t(*MIDIMsgBuilder_GetTime_CB_t)(void);
 
 #define MIDIMsgBuilder_getMsg(mmb) (mmb->msg)
-#define MIDIMsgBuilder_appendByte(mmb,byte) MIDIMsgBuilder_getMsg(mmb)->data[mmb->waitByte++] = byte
+#define MIDIMsgBuilder_appendByte(mmb,byte) MIDIMsg_setByte(MIDIMsgBuilder_getMsg(mmb),mmb->waitByte++,byte)
 
 #endif /* MM_MIDIEVENTBUILDER_H */

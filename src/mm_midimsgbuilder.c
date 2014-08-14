@@ -69,12 +69,13 @@ MIDIMsgBuilder_State_t MIDIMsgBuilder_update(MIDIMsgBuilder *mmb,
         case MIDIMsgBuilder_State_WAIT_DATA :
             if (MIDIMSG_IS_STATUS(byte)) {
                 /* old event is now garbage, start over again */
-                free(mmb->msg);
+                MIDIMsg_free(mmb->msg);
                 MIDIMsgBuilder_init(mmb);
                 MIDIMsgBuilder_updateIfSTATUS(mmb, byte);
             } else if (MIDIMSG_IS_DATA(byte)) {
                 MIDIMsgBuilder_appendByte(mmb, byte);
-                if (MIDIMSG_GET_LENGTH(MIDIMsgBuilder_getMsg(mmb)->data[0]) == mmb->waitByte) {
+                if (MIDIMSG_GET_LENGTH(MIDIMsg_getByte(MIDIMsgBuilder_getMsg(mmb),0)) 
+                        == mmb->waitByte) {
                     MIDIMsgBuilder_updateIfCOMPLETE(mmb);
                 }
             }

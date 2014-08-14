@@ -37,6 +37,13 @@
                                      MIDIMSG_IS_CNTRL_CHNG(x) || \
                                      MIDIMSG_IS_PCH_BND(x))
 
+/* These are provided for future extensions where, perhaps, the data will be a
+ * linked list rather than an array of bytes, to support sysex messages, for
+ * example */
+#define MIDIMsg_setByte(msg,index,value) (msg)->data[index] = value
+#define MIDIMsg_getByte(msg,index) (msg)->data[index]
+#define MIDIMsg_free(msg) free(msg) 
+
 typedef uint8_t MIDIMsg_Byte_t;
 
 typedef struct __MIDIMsg {
