@@ -14,15 +14,15 @@ typedef enum
 typedef struct __MIDIMsgBuilder {
     MIDIMsgBuilder_State_t state;
     size_t waitByte;
-    MIDIMsg *event;
+    MIDIMsg *msg;
 } MIDIMsgBuilder;
 
 typedef void(*MIDIMsgBuilder_OnComplete_CB_t)(MIDIMsgBuilder *);
 /* This doesn't make sense because MIDIMsg doesn't have a time associated with
  * it. */
-typedef MIDIMsg_Time_t(*MIDIMsgBuilder_GetTime_CB_t)(void);
+//typedef MIDIMsg_Time_t(*MIDIMsgBuilder_GetTime_CB_t)(void);
 
-#define MIDIMsgBuilder_getMsg(mmb) (mmb->event->msg)
-#define MIDIMsgBuilder_appendByte(mmb,byte) MIDIMsgBuilder_getMsg(mmb).data[mmb->waitByte++] = byte
+#define MIDIMsgBuilder_getMsg(mmb) (mmb->msg)
+#define MIDIMsgBuilder_appendByte(mmb,byte) MIDIMsgBuilder_getMsg(mmb)->data[mmb->waitByte++] = byte
 
 #endif /* MM_MIDIEVENTBUILDER_H */

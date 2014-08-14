@@ -49,4 +49,30 @@ size_t MIDIMsg_lengthFromStatus(MIDIMsg_Byte_t status);
 void MIDIMsg_init(MIDIMsg *msg, size_t n, ...);
 MIDIMsg *MIDIMsg_newFromStatus(MIDIMsg_Byte_t status);
 
+#ifdef MIDI_MSG_DEBUG
+#include <stdio.h> 
+
+static inline void MIDIMsg_print(MIDIMsg *msg)
+{
+    size_t length = MIDIMsg_lengthFromStatus(msg->data[0]), i;
+    for (i = 0; i < length; i++) {
+        printf("%0#4x (%3d) ", msg->data[i], msg->data[i]);
+    }
+    printf("\n");
+}
+
+/* returns 1 if message equal to string of bytes supplied, 0 otherwise */
+static inline int MIDIMsg_checkEqual(MIDIMsg *msg, MIDIMsg_Byte_t *bytes, size_t length)
+{
+    size_t msgLength = MIDIMsg_lengthFromStatus(msg->data[0]), i;
+    if (msgLength != length) { return 0; }
+    int result = 1;
+    for (i = 0; i < length; i++) {
+        result = result && (msg->data[i] == bytes[i]);
+    }
+    return result;
+}
+
+#endif  
+
 #endif /* MM_MIDIMSG_H */
