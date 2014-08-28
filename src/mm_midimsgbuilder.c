@@ -55,8 +55,7 @@ static void MIDIMsgBuilder_updateIfCOMPLETE(MIDIMsgBuilder *mmb)
  * }
  */
 MIDIMsgBuilder_State_t MIDIMsgBuilder_update(MIDIMsgBuilder *mmb,
-                             MIDIMsg_Byte_t byte,
-                             MIDIMsgBuilder_OnComplete_CB_t on_complete)
+                             MIDIMsg_Byte_t byte)
 {
 
     switch (mmb->state) {

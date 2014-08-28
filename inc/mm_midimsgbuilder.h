@@ -22,4 +22,7 @@ typedef void(*MIDIMsgBuilder_OnComplete_CB_t)(MIDIMsgBuilder *);
 #define MIDIMsgBuilder_getMsg(mmb) (mmb->msg)
 #define MIDIMsgBuilder_appendByte(mmb,byte) MIDIMsg_setByte(MIDIMsgBuilder_getMsg(mmb),mmb->waitByte++,byte)
 
+void MIDIMsgBuilder_init(MIDIMsgBuilder *mmb);
+MIDIMsgBuilder_State_t MIDIMsgBuilder_update(MIDIMsgBuilder *mmb, MIDIMsg_Byte_t byte);
+
 #endif /* MM_MIDIEVENTBUILDER_H */
