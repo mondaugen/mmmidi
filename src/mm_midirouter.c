@@ -1,0 +1,97 @@
+#include "mm_midirouter.h"
+#include <string.h> 
+
+int MIDI_Router_handleMsg(MIDI_Router *router, MIDIMsg *msg)
+{
+    if((!msg) || (!msg->data)) {
+        return MIDI_Router_Err_NULL;
+    }
+    MIDIMsg_Byte_t chan = MIDIMSG_GET_CHANNEL(msg->data[0]);
+    switch (MIDIMSG_GET_STATUS(msg->data[0])) {
+        case MIDIMSG_NOTE_OFF :
+            if (router->cbSets[chan].noteOff.callback 
+                    && router->cbSets[chan].noteOff.data) { 
+                MIDI_CB_Info_call(router->cbSets[chan].noteOff,msg);
+            }
+        case MIDIMSG_NOTE_ON :
+            if (router->cbSets[chan].noteOn.callback 
+                    && router->cbSets[chan].noteOn.data) { 
+                MIDI_CB_Info_call(router->cbSets[chan].noteOn,msg);
+            }
+        case MIDIMSG_POLY_PRS :
+            if (router->cbSets[chan].aftertouch.callback 
+                    && router->cbSets[chan].aftertouch.data) { 
+                MIDI_CB_Info_call(router->cbSets[chan].aftertouch,msg);
+            }
+        case MIDIMSG_CNTRL_CHNG :
+            if (router->cbSets[chan].controlChange.callback 
+                    && router->cbSets[chan].controlChange.data) { 
+                MIDI_CB_Info_call(router->cbSets[chan].controlChange,msg);
+            }
+        case MIDIMSG_PRGRM_CHNG :
+            if (router->cbSets[chan].programChange.callback 
+                    && router->cbSets[chan].programChange.data) { 
+                MIDI_CB_Info_call(router->cbSets[chan].programChange,msg);
+            }
+        case MIDIMSG_CHN_PRS :
+            if (router->cbSets[chan].channelPressure.callback 
+                    && router->cbSets[chan].channelPressure.data) { 
+                MIDI_CB_Info_call(router->cbSets[chan].channelPressure,msg);
+            }
+        case MIDIMSG_PCH_BND :
+            if (router->cbSets[chan].pitchBendChange.callback 
+                    && router->cbSets[chan].pitchBendChange.data) { 
+                MIDI_CB_Info_call(router->cbSets[chan].pitchBendChange,msg);
+            }
+        case MIDIMSG_SYS_COMMON :
+            if (router->cbSets[chan].systemCommon.callback 
+                    && router->cbSets[chan].systemCommon.data) { 
+                MIDI_CB_Info_call(router->cbSets[chan].systemCommon,msg);
+            }
+        default :
+            return MIDI_Router_Err_NOTIMP;
+    }
+    return MIDI_Router_Err_GOOD;
+}
+
+/* Add the cb and its data to the cc number of router */
+MIDI_Router_Err MIDI_Router_addCB(MIDI_Router *router, MIDIMsg_Byte_t type, MIDIMsg_Byte_t chan, MIDI_Router_CB cb, void *data)
+{
+    switch (type) {
+        case MIDIMSG_NOTE_OFF :
+            router->cbSets[chan].noteOff.callback = cb;
+            router->cbSets[chan].noteOff.data = data;
+        case MIDIMSG_NOTE_ON :
+            router->cbSets[chan].noteOn.callback = cb;
+            router->cbSets[chan].noteOn.data = data;
+        case MIDIMSG_POLY_PRS :
+            router->cbSets[chan].aftertouch.callback = cb;
+            router->cbSets[chan].aftertouch.data = data;
+        case MIDIMSG_CNTRL_CHNG :
+            router->cbSets[chan].controlChange.callback = cb;
+            router->cbSets[chan].controlChange.data = data;
+        case MIDIMSG_PRGRM_CHNG :
+            router->cbSets[chan].programChange.callback = cb;
+            router->cbSets[chan].programChange.data = data;
+        case MIDIMSG_CHN_PRS :
+            router->cbSets[chan].channelPressure.callback = cb;
+            router->cbSets[chan].channelPressure.data = data;
+        case MIDIMSG_PCH_BND :
+            router->cbSets[chan].pitchBendChange.callback = cb;
+            router->cbSets[chan].pitchBendChange.data = data;
+        case MIDIMSG_SYS_COMMON :
+            router->cbSets[chan].systemCommon.callback = cb;
+            router->cbSets[chan].systemCommon.data = data;
+        default :
+            return MIDI_Router_Err_NOTIMP;
+    }
+    return MIDI_Router_Err_GOOD;
+}
+
+void MIDI_Router_init(MIDI_Router *router)
+{
+    size_t chan;
+    for (chan = 0; chan < MIDI_Router_NUM_CHANS; chan++) {
+        memset(&router->cbSets[chan],0,sizeof(MIDI_Router_CB_Set));
+    }
+}

@@ -2,7 +2,7 @@
 #define MM_MIDICCROUTER_H 
 #include "mm_midimsg.h" 
 
-#define MIDI_CC_CB_Router_NUM_CBS 128; 
+#define MIDI_CC_CB_Router_NUM_CBS 128
 
 typedef struct __MIDI_CC_CB_Router MIDI_CC_CB_Router;
 
@@ -36,7 +36,7 @@ struct __MIDI_CC_CB_Info {
     void *data;
 };
 
-#define MIDI_CC_CB_Info_call(cbinfo,val) cbinfo.call(cbinfo.data,val)
+#define MIDI_CC_CB_Info_call(cbinfo,val) cbinfo.callback(cbinfo.data,val)
 
 struct __MIDI_CC_CB_Router {
     MIDI_CC_CB_Info cbInfos[MIDI_CC_CB_Router_NUM_CBS];
@@ -47,5 +47,8 @@ struct __MIDI_CC_CB_Router {
 void MIDI_CC_CB_Router_route(void *router, MIDIMsg *msg);
 /* Add the cb and its data to the cc number of router */
 void MIDI_CC_CB_Router_addCB(MIDI_CC_CB_Router *router, MIDIMsg_Byte_t cc, MIDI_CC_CB_Router_CB cb, void *data);
+/* Initialize cc router to null so there are no problems when trying to call a
+ * non existing control change callback. */
+void MIDI_CC_CB_Router_init(MIDI_CC_CB_Router *router);
 
 #endif /* MM_MIDICCROUTER_H */
