@@ -6,7 +6,7 @@
 
 typedef struct __MIDI_CC_CB_Router MIDI_CC_CB_Router;
 
-typedef void (*MIDI_CC_CB_Router_CB)(void *,MIDIMsg_Byte_t);
+typedef void (*MIDI_CC_CB_Router_CB)(void *,MIDIMsg*);
 
 typedef struct __MIDI_CC_CB_Info MIDI_CC_CB_Info;
 
@@ -44,7 +44,7 @@ struct __MIDI_CC_CB_Router {
 
 /* Route the control change message to the correct callback and call it with val.
  * Router gets casted to *MIDI_CC_CB_Router.*/
-void MIDI_CC_CB_Router_route(void *router, MIDIMsg_Byte_t cc, MIDIMsg_Byte_t val);
+void MIDI_CC_CB_Router_route(void *router, MIDIMsg *msg);
 /* Add the cb and its data to the cc number of router */
 void MIDI_CC_CB_Router_addCB(MIDI_CC_CB_Router *router, MIDIMsg_Byte_t cc, MIDI_CC_CB_Router_CB cb, void *data);
 

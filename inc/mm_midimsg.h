@@ -12,6 +12,7 @@
 #define MIDIMSG_PRGRM_CHNG  0xc0
 #define MIDIMSG_CHN_PRS     0xd0
 #define MIDIMSG_PCH_BND     0xe0
+#define MIDIMSG_SYS_COMMON  0xf0
 
 #define MIDIMSG_IS_STATUS(x) ((x) & 0x80) 
 #define MIDIMSG_IS_DATA(x)   (!(MIDIMSG_IS_STATUS(x))) 
