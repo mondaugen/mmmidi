@@ -1,8 +1,14 @@
 #ifndef MM_MIDIEVENTBUILDER_H
 #define MM_MIDIEVENTBUILDER_H 
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include <stdlib.h>
 #include <stdint.h> 
 #include "mm_midimsg.h" 
+
 
 typedef enum
 {
@@ -25,4 +31,7 @@ typedef void(*MIDIMsgBuilder_OnComplete_CB_t)(MIDIMsgBuilder *);
 void MIDIMsgBuilder_init(MIDIMsgBuilder *mmb);
 MIDIMsgBuilder_State_t MIDIMsgBuilder_update(MIDIMsgBuilder *mmb, MIDIMsg_Byte_t byte);
 
+#ifdef __cplusplus
+}
+#endif  
 #endif /* MM_MIDIEVENTBUILDER_H */

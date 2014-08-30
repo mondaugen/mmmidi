@@ -46,6 +46,12 @@ void MyMidiCCMsg_do(void *data, MIDIMsg *msg)
     printf("%s: %d\n", ((struct MyMidiCCMsg*)data)->str, msg->data[2]);
 }
 
+void MyMidiNoteOn_do(void *data, MIDIMsg *msg)
+{
+    printf("%s: %d %d\n", ((struct MyMidiCCMsg*)data)->str, msg->data[1], msg->data[2]);
+}
+
+
 int main( int argc, char *argv[] )
 {
   RtMidiIn *midiin = 0;
@@ -54,7 +60,7 @@ int main( int argc, char *argv[] )
   double stamp;
 
   // Minimal command-line check.
-  if ( argc > 2 ) usage();
+  if ( argc != 2 ) usage();
 
   // RtMidiIn constructor
   try {
@@ -96,9 +102,12 @@ int main( int argc, char *argv[] )
   MIDI_Router_Standard_init(&router);
   struct MyMidiCCMsg MyMidiCCMsg1 = { "blah blah" };
   struct MyMidiCCMsg MyMidiCCMsg2 = { "matt damon" };
+  struct MyMidiCCMsg MyMidiCCMsg3 = { "rob ford" };
+
   // Set callbacks on cc 2 and 14 on channel 0
   MIDI_CC_CB_Router_addCB(&router.cbRouters[0],2,MyMidiCCMsg_do,(void*)&MyMidiCCMsg1);
   MIDI_CC_CB_Router_addCB(&router.cbRouters[0],14,MyMidiCCMsg_do,(void*)&MyMidiCCMsg2);
+  MIDI_Router_addCB(&router.router, MIDIMSG_NOTE_ON, 0, MyMidiNoteOn_do, (void*)&MyMidiCCMsg3);
 
   // Periodically check input queue.
   std::cout << "Reading MIDI from port ... quit with Ctrl-C.\n";
@@ -106,13 +115,15 @@ int main( int argc, char *argv[] )
     stamp = midiin->getMessage( &message );
     nBytes = message.size();
     MIDIMsg *midiMsg = MIDIMsg_new(nBytes);
-    for ( i=0; i<nBytes; i++ )
+    for ( i=0; i < nBytes; i++ ) {
         std::cout << "Byte " << i << " = " << (int)message[i] << ", ";
         midiMsg->data[i] = message[i];
-    if ( nBytes > 0 )
+    }
+    if ( nBytes > 0 ) {
         std::cout << "stamp = " << stamp << std::endl;
+        MIDI_Router_handleMsg(&router.router,midiMsg);
+    }
 
-    MIDI_Router_handleMsg(&router.router,midiMsg);
 
     // Sleep for 10 milliseconds.
     SLEEP( 10 );

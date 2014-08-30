@@ -1,5 +1,10 @@
 #ifndef MM_MIDIEVENTBUILDER_H
 #define MM_MIDIEVENTBUILDER_H 
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include <stdlib.h>
 #include <stdint.h> 
 #include "mm_midievent.h" 
@@ -24,4 +29,7 @@ typedef MIDIEvent_Time_t(*MIDIEventBuilder_GetTime_CB_t)(void);
 #define MIDIEventBuilder_appendByte(meb,byte) MIDIEventBuilder_getMsg(meb).data[meb->waitByte++] = byte
 
 
+#ifdef __cplusplus
+}
+#endif  
 #endif /* MM_MIDIEVENTBUILDER_H */

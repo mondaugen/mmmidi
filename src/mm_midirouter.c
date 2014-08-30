@@ -13,41 +13,49 @@ int MIDI_Router_handleMsg(MIDI_Router *router, MIDIMsg *msg)
                     && router->cbSets[chan].noteOff.data) { 
                 MIDI_CB_Info_call(router->cbSets[chan].noteOff,msg);
             }
+            break;
         case MIDIMSG_NOTE_ON :
             if (router->cbSets[chan].noteOn.callback 
                     && router->cbSets[chan].noteOn.data) { 
                 MIDI_CB_Info_call(router->cbSets[chan].noteOn,msg);
             }
+            break;
         case MIDIMSG_POLY_PRS :
             if (router->cbSets[chan].aftertouch.callback 
                     && router->cbSets[chan].aftertouch.data) { 
                 MIDI_CB_Info_call(router->cbSets[chan].aftertouch,msg);
             }
+            break;
         case MIDIMSG_CNTRL_CHNG :
             if (router->cbSets[chan].controlChange.callback 
                     && router->cbSets[chan].controlChange.data) { 
                 MIDI_CB_Info_call(router->cbSets[chan].controlChange,msg);
             }
+            break;
         case MIDIMSG_PRGRM_CHNG :
             if (router->cbSets[chan].programChange.callback 
                     && router->cbSets[chan].programChange.data) { 
                 MIDI_CB_Info_call(router->cbSets[chan].programChange,msg);
             }
+            break;
         case MIDIMSG_CHN_PRS :
             if (router->cbSets[chan].channelPressure.callback 
                     && router->cbSets[chan].channelPressure.data) { 
                 MIDI_CB_Info_call(router->cbSets[chan].channelPressure,msg);
             }
+            break;
         case MIDIMSG_PCH_BND :
             if (router->cbSets[chan].pitchBendChange.callback 
                     && router->cbSets[chan].pitchBendChange.data) { 
                 MIDI_CB_Info_call(router->cbSets[chan].pitchBendChange,msg);
             }
+            break;
         case MIDIMSG_SYS_COMMON :
             if (router->cbSets[chan].systemCommon.callback 
                     && router->cbSets[chan].systemCommon.data) { 
                 MIDI_CB_Info_call(router->cbSets[chan].systemCommon,msg);
             }
+            break;
         default :
             return MIDI_Router_Err_NOTIMP;
     }
@@ -61,27 +69,35 @@ MIDI_Router_Err MIDI_Router_addCB(MIDI_Router *router, MIDIMsg_Byte_t type, MIDI
         case MIDIMSG_NOTE_OFF :
             router->cbSets[chan].noteOff.callback = cb;
             router->cbSets[chan].noteOff.data = data;
+            break;
         case MIDIMSG_NOTE_ON :
             router->cbSets[chan].noteOn.callback = cb;
             router->cbSets[chan].noteOn.data = data;
+            break;
         case MIDIMSG_POLY_PRS :
             router->cbSets[chan].aftertouch.callback = cb;
             router->cbSets[chan].aftertouch.data = data;
+            break;
         case MIDIMSG_CNTRL_CHNG :
             router->cbSets[chan].controlChange.callback = cb;
             router->cbSets[chan].controlChange.data = data;
+            break;
         case MIDIMSG_PRGRM_CHNG :
             router->cbSets[chan].programChange.callback = cb;
             router->cbSets[chan].programChange.data = data;
+            break;
         case MIDIMSG_CHN_PRS :
             router->cbSets[chan].channelPressure.callback = cb;
             router->cbSets[chan].channelPressure.data = data;
+            break;
         case MIDIMSG_PCH_BND :
             router->cbSets[chan].pitchBendChange.callback = cb;
             router->cbSets[chan].pitchBendChange.data = data;
+            break;
         case MIDIMSG_SYS_COMMON :
             router->cbSets[chan].systemCommon.callback = cb;
             router->cbSets[chan].systemCommon.data = data;
+            break;
         default :
             return MIDI_Router_Err_NOTIMP;
     }

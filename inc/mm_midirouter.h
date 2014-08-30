@@ -1,6 +1,10 @@
 #ifndef MM_MIDIROUTER_H
 #define MM_MIDIROUTER_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include "mm_midimsg.h" 
 
 #define  MIDI_Router_NUM_CHANS 16
@@ -46,4 +50,7 @@ MIDI_Router_Err MIDI_Router_addCB(MIDI_Router *router, MIDIMsg_Byte_t type, MIDI
 /* Set all the cbsets to null so we know not to call unset callbacks */
 void MIDI_Router_init(MIDI_Router *router);
 
+#ifdef __cplusplus
+}
+#endif  
 #endif /* MM_MIDIROUTER_H */

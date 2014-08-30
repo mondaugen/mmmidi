@@ -1,5 +1,10 @@
 #ifndef MM_MIDICCROUTER_H
 #define MM_MIDICCROUTER_H 
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include "mm_midimsg.h" 
 
 #define MIDI_CC_CB_Router_NUM_CBS 128
@@ -50,5 +55,9 @@ void MIDI_CC_CB_Router_addCB(MIDI_CC_CB_Router *router, MIDIMsg_Byte_t cc, MIDI_
 /* Initialize cc router to null so there are no problems when trying to call a
  * non existing control change callback. */
 void MIDI_CC_CB_Router_init(MIDI_CC_CB_Router *router);
+
+#ifdef __cplusplus
+}
+#endif  
 
 #endif /* MM_MIDICCROUTER_H */

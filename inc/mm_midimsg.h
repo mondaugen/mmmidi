@@ -1,6 +1,10 @@
 #ifndef MM_MIDIMSG_H
 #define MM_MIDIMSG_H 
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include <stdlib.h>
 #include <stdint.h> 
 #include <stdarg.h> 
@@ -86,7 +90,10 @@ static inline int MIDIMsg_checkEqual(MIDIMsg *msg, MIDIMsg_Byte_t *bytes, size_t
     }
     return result;
 }
-
 #endif  
 
+
+#ifdef __cplusplus
+}
+#endif  
 #endif /* MM_MIDIMSG_H */
