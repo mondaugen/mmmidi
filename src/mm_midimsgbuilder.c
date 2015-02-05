@@ -79,6 +79,11 @@ MIDIMsgBuilder_State_t MIDIMsgBuilder_update(MIDIMsgBuilder *mmb,
                 }
             }
             return mmb->state;
+        case MIDIMsgBuilder_State_COMPLETE:
+            break;
+        default:
+            break;
     }
+    return mmb->state;
 }
 
