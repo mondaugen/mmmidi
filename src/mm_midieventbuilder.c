@@ -55,12 +55,6 @@ void MIDIEventBuilder_update(MIDIEventBuilder *meb,
                 MIDIEventBuilder_updateIfSTATUS(meb, byte, get_time());
             } else if (MIDIMSG_IS_DATA(byte)) {
                 MIDIEventBuilder_appendByte(meb, byte);
-                /*
-                if ((MIDIMSG_IS_2_BYTE_MSG(MIDIEventBuilder_getMsg(meb).data[0])
-                        && (meb->waitByte == 2))
-                    || (MIDIMSG_IS_3_BYTE_MSG(MIDIEventBuilder_getMsg(meb).data[0])
-                        && (meb->waitByte == 3)))
-                */
                 if (MIDIMSG_GET_LENGTH(MIDIEventBuilder_getMsg(meb).data[0]) == meb->waitByte) {
                     MIDIEventBuilder_updateIfCOMPLETE(meb, on_complete);
                 }
