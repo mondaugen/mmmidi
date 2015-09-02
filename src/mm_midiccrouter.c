@@ -4,9 +4,9 @@
 /* Route the control change message to the correct callback and call it with val */
 void MIDI_CC_CB_Router_route(void *router, MIDIMsg *msg)
 {
-    if (((MIDI_CC_CB_Router*)router)->cbInfos[msg->data[1]].callback
-            && ((MIDI_CC_CB_Router*)router)->cbInfos[msg->data[1]].data) {
-        MIDI_CC_CB_Info_call(((MIDI_CC_CB_Router*)router)->cbInfos[msg->data[1]],msg);
+    if (((MIDI_CC_CB_Router*)router)->cbInfos[msg->data[1]].callback) {
+        MIDI_CC_CB_Info_call(((MIDI_CC_CB_Router*)router)->cbInfos[msg->data[1]],
+                msg);
     }
 }
 
