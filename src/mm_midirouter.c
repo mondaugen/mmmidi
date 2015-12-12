@@ -1,6 +1,8 @@
 #include "mm_midirouter.h"
 #include <string.h> 
 
+/* The msg is not freed! To avoid memory leaks this should be done somewhere if
+ * the message was allocated with malloc. */
 int MIDI_Router_handleMsg(MIDI_Router *router, MIDIMsg *msg)
 {
     if((!msg) || (!msg->data)) {

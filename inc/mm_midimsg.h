@@ -9,6 +9,8 @@ extern "C" {
 #include <stdint.h> 
 #include <stdarg.h> 
 
+#define MIDIMSG_DATA_BYTE_MAX 127 
+
 #define MIDIMSG_NOTE_OFF    0x80
 #define MIDIMSG_NOTE_ON     0x90
 #define MIDIMSG_POLY_PRS    0xa0
