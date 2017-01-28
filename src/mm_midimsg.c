@@ -50,3 +50,9 @@ MIDIMsg *MIDIMsg_newFromStatus(MIDIMsg_Byte_t status)
     MIDIMsg_init(result, 1, status);
     return result;
 }
+
+/* Pass the status byte of the message.
+ * Returns the number of data bytes to expect.
+ * If a sysex start message , returns -1.
+ */
+int MIDIMsg_numDataBytes(MIDIMsg_Byte_t byte)

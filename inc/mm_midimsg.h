@@ -26,7 +26,7 @@ extern "C" {
 
 #define MIDIMSG_GET_STATUS(x)       ((x) & 0xf0) 
 #define MIDIMSG_GET_CHANNEL(x)      ((x) & 0x0f) 
-#define MIDIMSG_KNOW_LENGTH(x)      (MIDIMSG_IS_2_BYTE_MSG(x) || MIDIMSG_IS_3_BYTE_MSG(x))  
+#define MIDIMSG_KNOW_LENGTH(x)      (MIDIMSG_IS_2_BYTE_MSG(x) || MIDIMSG_IS_3_BYTE_MSG(x))
 #define MIDIMSG_GET_LENGTH(x)       (MIDIMSG_IS_2_BYTE_MSG(x) ? 2 : (MIDIMSG_IS_3_BYTE_MSG(x) ? 3 : 0))
 
 #define MIDIMSG_IS_NOTE_OFF(x)      (MIDIMSG_GET_STATUS(x) == MIDIMSG_NOTE_OFF)
@@ -36,6 +36,22 @@ extern "C" {
 #define MIDIMSG_IS_PRGRM_CHNG(x)    (MIDIMSG_GET_STATUS(x) == MIDIMSG_PRGRM_CHNG)
 #define MIDIMSG_IS_CHN_PRS(x)       (MIDIMSG_GET_STATUS(x) == MIDIMSG_CHN_PRS)
 #define MIDIMSG_IS_PCH_BND(x)       (MIDIMSG_GET_STATUS(x) == MIDIMSG_PCH_BND)
+#define MIDIMSG_IS_SYSEX_START(x)   (MIDIMSG_GET_STATUS(x) == MIDIMSG_SYSEX_START)
+/* MIDI timecode quarter frame */
+#define MIDIMSG_IS_MTCQF(x)         (MIDIMSG_GET_STATUS(x) == MIDIMSG_MTCQF)
+/* Song position pointer */
+#define MIDIMSG_IS_SONG_POS(x)      (MIDIMSG_GET_STATUS(x) == MIDIMSG_SONG_POS)
+#define MIDIMSG_IS_SONG_SEL(x)      (MIDIMSG_GET_STATUS(x) == MIDIMSG_SONG_SEL) 
+#define MIDIMSG_IS_TUNE_RQST(x)     (MIDIMSG_GET_STATUS(x) == MIDIMSG_TUNE_RQST)
+#define MIDIMSG_IS_SYSEX_END(x)     (MIDIMSG_GET_STATUS(x) == MIDIMSG_SYSEX_END)
+#define MIDIMSG_IS_CLK(x)           (MIDIMSG_GET_STATUS(x) == MIDIMSG_CLK) 
+#define MIDIMSG_IS_START(x)         (MIDIMSG_GET_STATUS(x) == MIDIMSG_START) 
+#define MIDIMSG_IS_CONT(x)          (MIDIMSG_GET_STATUS(x) == MIDIMSG_CONT) 
+#define MIDIMSG_IS_STOP(x)          (MIDIMSG_GET_STATUS(x) == MIDIMSG_STOP) 
+#define MIDIMSG_IS_ACT_SENSE(x)     (MIDIMSG_GET_STATUS(x) == MIDIMSG_ACT_SENSE) 
+#define MIDIMSG_IS_RST(x)           (MIDIMSG_GET_STATUS(x) == MIDIMSG_RST) 
+#define MIDIMSG_IS_UNDEF(x)         ((x == 0xf4) || (x == 0xf5) || (x == 0xfe))
+
 
 #define MIDIMSG_IS_2_BYTE_MSG(x)    (MIDIMSG_IS_PRGRM_CHNG(x) || \
                                      MIDIMSG_IS_CHN_PRS(x))
