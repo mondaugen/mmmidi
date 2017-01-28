@@ -56,3 +56,6 @@ MIDIMsg *MIDIMsg_newFromStatus(MIDIMsg_Byte_t status)
  * If a sysex start message , returns -1.
  */
 int MIDIMsg_numDataBytes(MIDIMsg_Byte_t byte)
+{
+    return -2; /* Not implemented. */
+}
