@@ -21,6 +21,19 @@ extern "C" {
 #define MIDIMSG_PCH_BND     0xe0
 #define MIDIMSG_SYS_COMMON  0xf0
 
+#define MIDIMSG_SYSEX_START 0xf0
+#define MIDIMSG_MTCQF       0xf1
+#define MIDIMSG_SONG_POS    0xf2
+#define MIDIMSG_SONG_SEL    0xf3
+#define MIDIMSG_TUNE_RQST   0xf6
+#define MIDIMSG_SYSEX_END   0xf7
+#define MIDIMSG_CLK         0xf8
+#define MIDIMSG_START       0xfa
+#define MIDIMSG_CONT        0xfb
+#define MIDIMSG_STOP        0xfc
+#define MIDIMSG_ACT_SENSE   0xfe
+#define MIDIMSG_RST         0xff
+
 #define MIDIMSG_IS_STATUS(x) ((x) & 0x80) 
 #define MIDIMSG_IS_DATA(x)   (!(MIDIMSG_IS_STATUS(x))) 
 
@@ -36,30 +49,46 @@ extern "C" {
 #define MIDIMSG_IS_PRGRM_CHNG(x)    (MIDIMSG_GET_STATUS(x) == MIDIMSG_PRGRM_CHNG)
 #define MIDIMSG_IS_CHN_PRS(x)       (MIDIMSG_GET_STATUS(x) == MIDIMSG_CHN_PRS)
 #define MIDIMSG_IS_PCH_BND(x)       (MIDIMSG_GET_STATUS(x) == MIDIMSG_PCH_BND)
-#define MIDIMSG_IS_SYSEX_START(x)   (MIDIMSG_GET_STATUS(x) == MIDIMSG_SYSEX_START)
+/* System common messages */
+#define MIDIMSG_IS_SYSEX_START(x)   (x == MIDIMSG_SYSEX_START)
 /* MIDI timecode quarter frame */
-#define MIDIMSG_IS_MTCQF(x)         (MIDIMSG_GET_STATUS(x) == MIDIMSG_MTCQF)
+#define MIDIMSG_IS_MTCQF(x)         (x == MIDIMSG_MTCQF)
 /* Song position pointer */
-#define MIDIMSG_IS_SONG_POS(x)      (MIDIMSG_GET_STATUS(x) == MIDIMSG_SONG_POS)
-#define MIDIMSG_IS_SONG_SEL(x)      (MIDIMSG_GET_STATUS(x) == MIDIMSG_SONG_SEL) 
-#define MIDIMSG_IS_TUNE_RQST(x)     (MIDIMSG_GET_STATUS(x) == MIDIMSG_TUNE_RQST)
-#define MIDIMSG_IS_SYSEX_END(x)     (MIDIMSG_GET_STATUS(x) == MIDIMSG_SYSEX_END)
-#define MIDIMSG_IS_CLK(x)           (MIDIMSG_GET_STATUS(x) == MIDIMSG_CLK) 
-#define MIDIMSG_IS_START(x)         (MIDIMSG_GET_STATUS(x) == MIDIMSG_START) 
-#define MIDIMSG_IS_CONT(x)          (MIDIMSG_GET_STATUS(x) == MIDIMSG_CONT) 
-#define MIDIMSG_IS_STOP(x)          (MIDIMSG_GET_STATUS(x) == MIDIMSG_STOP) 
-#define MIDIMSG_IS_ACT_SENSE(x)     (MIDIMSG_GET_STATUS(x) == MIDIMSG_ACT_SENSE) 
-#define MIDIMSG_IS_RST(x)           (MIDIMSG_GET_STATUS(x) == MIDIMSG_RST) 
+#define MIDIMSG_IS_SONG_POS(x)      (x == MIDIMSG_SONG_POS)
+#define MIDIMSG_IS_SONG_SEL(x)      (x == MIDIMSG_SONG_SEL) 
+#define MIDIMSG_IS_TUNE_RQST(x)     (x == MIDIMSG_TUNE_RQST)
+#define MIDIMSG_IS_SYSEX_END(x)     (x == MIDIMSG_SYSEX_END)
+#define MIDIMSG_IS_CLK(x)           (x == MIDIMSG_CLK) 
+#define MIDIMSG_IS_START(x)         (x == MIDIMSG_START) 
+#define MIDIMSG_IS_CONT(x)          (x == MIDIMSG_CONT) 
+#define MIDIMSG_IS_STOP(x)          (x == MIDIMSG_STOP) 
+#define MIDIMSG_IS_ACT_SENSE(x)     (x == MIDIMSG_ACT_SENSE) 
+#define MIDIMSG_IS_RST(x)           (x == MIDIMSG_RST) 
 #define MIDIMSG_IS_UNDEF(x)         ((x == 0xf4) || (x == 0xf5) || (x == 0xfe))
 
 
+#define MIDIMSG_IS_1_BYTE_MSG(x)    (MIDIMSG_IS_SYSEX_START(x)|| \
+                                     MIDIMSG_IS_UNDEF(x)      || \
+                                     MIDIMSG_IS_TUNE_RQST(x)  || \
+                                     MIDIMSG_IS_SYSEX_END(x)  || \
+                                     MIDIMSG_IS_CLK(x)        || \
+                                     MIDIMSG_IS_START(x)      || \
+                                     MIDIMSG_IS_CONT(x)       || \
+                                     MIDIMSG_IS_STOP(x)       || \
+                                     MIDIMSG_IS_ACT_SENSE(x)  || \
+                                     MIDIMSG_IS_RST(x))
+
 #define MIDIMSG_IS_2_BYTE_MSG(x)    (MIDIMSG_IS_PRGRM_CHNG(x) || \
-                                     MIDIMSG_IS_CHN_PRS(x))
+                                     MIDIMSG_IS_CHN_PRS(x)    || \
+                                     MIDIMSG_IS_MTCQF(x)      || \
+                                     MIDIMSG_IS_SONG_SEL(x))
+
 #define MIDIMSG_IS_3_BYTE_MSG(x)    (MIDIMSG_IS_NOTE_OFF(x)   || \
                                      MIDIMSG_IS_NOTE_ON(x)    || \
                                      MIDIMSG_IS_POLY_PRS(x)   || \
                                      MIDIMSG_IS_CNTRL_CHNG(x) || \
-                                     MIDIMSG_IS_PCH_BND(x))
+                                     MIDIMSG_IS_PCH_BND(x)    || \
+                                     MIDIMSG_IS_SONG_POS(x)) 
 
 /* These are provided for future extensions where, perhaps, the data will be a
  * linked list rather than an array of bytes, to support sysex messages, for
@@ -85,6 +114,7 @@ MIDIMsg *MIDIMsg_new(size_t length);
 size_t MIDIMsg_lengthFromStatus(MIDIMsg_Byte_t status);
 void MIDIMsg_init(MIDIMsg *msg, size_t n, ...);
 MIDIMsg *MIDIMsg_newFromStatus(MIDIMsg_Byte_t status);
+int MIDIMsg_numDataBytes(MIDIMsg_Byte_t byte);
 
 #ifdef MIDI_MSG_DEBUG
 #include <stdio.h> 

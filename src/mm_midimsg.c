@@ -54,8 +54,21 @@ MIDIMsg *MIDIMsg_newFromStatus(MIDIMsg_Byte_t status)
 /* Pass the status byte of the message.
  * Returns the number of data bytes to expect.
  * If a sysex start message , returns -1.
+ * Returns -2 on unrecognized message.
  */
 int MIDIMsg_numDataBytes(MIDIMsg_Byte_t byte)
 {
-    return -2; /* Not implemented. */
+    if (MIDIMSG_IS_SYSEX_START(byte)) {
+       return -1;
+    } 
+    if (MIDIMSG_IS_1_BYTE_MSG(byte)) {
+        return 0;
+    }
+    if (MIDIMSG_IS_2_BYTE_MSG(byte)) {
+        return 1;
+    }
+    if (MIDIMSG_IS_3_BYTE_MSG(byte)) {
+        return 2;
+    }
+    return -2;
 }

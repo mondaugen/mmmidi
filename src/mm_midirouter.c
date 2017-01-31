@@ -48,6 +48,8 @@ int MIDI_Router_handleMsg(MIDI_Router *router, MIDIMsg *msg)
             }
             break;
         case MIDIMSG_SYS_COMMON :
+            /* TODO: This doesn't make any sense as system common messages can't
+             * have a channel. */
             if (router->cbSets[chan].systemCommon.callback) { 
                 MIDI_CB_Info_call(router->cbSets[chan].systemCommon,msg);
             }
