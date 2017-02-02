@@ -34,8 +34,9 @@ extern "C" {
 #define MIDIMSG_ACT_SENSE   0xfe
 #define MIDIMSG_RST         0xff
 
-#define MIDIMSG_IS_STATUS(x) ((x) & 0x80) 
-#define MIDIMSG_IS_DATA(x)   (!(MIDIMSG_IS_STATUS(x))) 
+#define MIDIMSG_IS_STATUS(x)        ((x) & 0x80) 
+#define MIDIMSG_IS_DATA(x)          (!(MIDIMSG_IS_STATUS(x))) 
+#define MIDIMSG_IS_SYS_COMMON(x)    ((x) >= MIDIMSG_SYS_COMMON) 
 
 #define MIDIMSG_GET_STATUS(x)       ((x) & 0xf0) 
 #define MIDIMSG_GET_CHANNEL(x)      ((x) & 0x0f) 

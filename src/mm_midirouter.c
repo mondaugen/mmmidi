@@ -8,6 +8,12 @@ int MIDI_Router_handleMsg(MIDI_Router *router, MIDIMsg *msg)
     if((!msg) || (!msg->data)) {
         return MIDI_Router_Err_NULL;
     }
+    if (MIDIMSG_IS_SYS_COMMON(msg->data[0])) {
+        if (router->systemCommon.callback) { 
+            MIDI_CB_Info_call(router->systemCommon,msg);
+        }
+        return MIDI_Router_Err_GOOD;
+    }
     MIDIMsg_Byte_t chan = MIDIMSG_GET_CHANNEL(msg->data[0]);
     switch (MIDIMSG_GET_STATUS(msg->data[0])) {
         /* for all cases, it is not required that data have been stored, only a
@@ -45,13 +51,6 @@ int MIDI_Router_handleMsg(MIDI_Router *router, MIDIMsg *msg)
         case MIDIMSG_PCH_BND :
             if (router->cbSets[chan].pitchBendChange.callback) { 
                 MIDI_CB_Info_call(router->cbSets[chan].pitchBendChange,msg);
-            }
-            break;
-        case MIDIMSG_SYS_COMMON :
-            /* TODO: This doesn't make any sense as system common messages can't
-             * have a channel. */
-            if (router->cbSets[chan].systemCommon.callback) { 
-                MIDI_CB_Info_call(router->cbSets[chan].systemCommon,msg);
             }
             break;
         default :
@@ -93,8 +92,8 @@ MIDI_Router_Err MIDI_Router_addCB(MIDI_Router *router, MIDIMsg_Byte_t type, MIDI
             router->cbSets[chan].pitchBendChange.data = data;
             break;
         case MIDIMSG_SYS_COMMON :
-            router->cbSets[chan].systemCommon.callback = cb;
-            router->cbSets[chan].systemCommon.data = data;
+            router->systemCommon.callback = cb;
+            router->systemCommon.data = data;
             break;
         default :
             return MIDI_Router_Err_NOTIMP;

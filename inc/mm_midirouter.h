@@ -36,11 +36,12 @@ struct __MIDI_Router_CB_Set {
     MIDI_Router_CB_Info programChange;
     MIDI_Router_CB_Info channelPressure;
     MIDI_Router_CB_Info pitchBendChange;
-    MIDI_Router_CB_Info systemCommon;
 };
 
 struct __MIDI_Router {
     MIDI_Router_CB_Set cbSets[MIDI_Router_NUM_CHANS];
+    /* System common messages have no channel. */
+    MIDI_Router_CB_Info systemCommon;
 };
 
 /* Call the appropriate callback based on what's in msg */
